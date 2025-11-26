@@ -15,6 +15,9 @@ def withdraw(balance):
     if amount > balance:
         print("Insufficient funds")
         return 0
+    elif amount < balance:
+        print("Your withdrawal was successful")
+        return 0
     elif amount < 0:
         print("Amount cannot be negative or has to be greater than 0")
         return 0
@@ -38,7 +41,7 @@ def transfer(balance):
     print("1. First Bank",)
     print("2. United Bank Africa")
     print("3. Sterling Bank ")
-    print("4. Wema Bank ")
+    print("4. Second Bank ")
     print("5. Polaris Bank")
     print("6. Guaranty Trust Bank")
     choice =input("Select the bank to transfer(1-6): ")
@@ -46,7 +49,7 @@ def transfer(balance):
         "1": "First Bank",
         "2": "United Bank Africa",
         "3": "Sterling Bank",
-        "4": "Wema Bank",
+        "4": "Second Bank",
         "5": "Polaris Bank",
         "6": "Guaranty Trust Bank",
     }
@@ -68,7 +71,8 @@ def transfer(balance):
         print("Insufficient funds")
         return 0
     elif amount < balance:
-        print(f"You have succesfully transferred the sum of ${amount:.2f} to {user} {banks[choice]}")
+        print(f"You have successfully transferred the sum of ${amount:.2f} to {user} {banks[choice]}")
+        return 0
     elif amount < 0:
         print("Amount cannot be negative or has to be greater than 0")
         return 0
@@ -81,7 +85,7 @@ def setup_pin(correct_pin):
     return correct_pin
 #----------------------the main function-----------------
 def main():
-    balance = 0
+    balance = 2000000
     is_running = True
     attempts = 3
     correct_pin = "1234"
@@ -89,7 +93,6 @@ def main():
     while attempts > 0:
         entered_pin = input("Enter your 4-digits PIN: ")
         entered_pin = entered_pin.replace(" ", "")
-        # entered_pin = entered_pin.isdigit()
         if entered_pin == correct_pin:
             print("\n PIN correct! Access granted.\n")
             break
