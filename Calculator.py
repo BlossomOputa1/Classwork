@@ -6,14 +6,24 @@ import flet as ft
 def main(page: ft.Page):
     page.title = "Phone Calculator"
     page.bgcolor = "black"
-    page.window.width = 350
-    page.window.height = 500
+    page.window.width = 400
+    page.window.height = 550
     page.window.center()
     page.padding = 20
+    page.scrollable = True
+    page.resizable = False
+
+    page.appbar=ft.AppBar(
+        leading=ft.Icon(ft.Icons.CALCULATE_OUTLINED, color=ft.Colors.WHITE),
+        center_title=True,
+        bgcolor="black",
+        actions=[ft.IconButton(ft.Icons.MENU, icon_color=ft.Colors.WHITE),
+        ]
+    )
 
     # Display area
     resulted_display = ft.Text(
-        value="0", color="white", size=40, weight="bold"
+        value="0", color="white", size=40, weight="bold", font_family=("Arial", 20),
     )
     # I created a dictionary that will serve as a container for the operator string
     state = {"current_operator": ""}
@@ -27,9 +37,8 @@ def main(page: ft.Page):
 
         elif data == "=":
             try:
-                # FIX: eval the stored equation, not the button value
+                # eval the stored equation, not the button value
                 expression = state["current_operator"]
-                # A simple trick to handle empty input
                 if not expression:
                     return
 
@@ -40,8 +49,23 @@ def main(page: ft.Page):
                 resulted_display.value = "Error"
                 state["current_operator"] = ""
 
+        # this is for the delete logic of the calculator
+        elif data == "DEL":
+            state["current_operator"] = state["current_operator"][:-1]
+            if state["current_operator"] == "":
+                resulted_display.value="0"
+            else:
+                resulted_display.value=state["current_operator"]
+        # this is the percentage logic of the computer
+        elif data == "%":
+            try:
+                present_value = eval(state["current_operator"])
+                state["current_operator"] = str(present_value/100)
+                resulted_display.value=state["current_operator"]
+            except Exception:
+                resulted_display.value="Error"
+                state["current_operator"] = ""
         else:
-            # FIX: The previous logic prevented operators from working.
             # We simply append the data here.
             state["current_operator"] += data
             resulted_display.value = state["current_operator"]
@@ -49,7 +73,7 @@ def main(page: ft.Page):
         # FIX: Update the page so the changes show up on screen!
         page.update()
 
-    def create_button(text, text_color=ft.Colors.WHITE, bg_color=ft.Colors.G,):
+    def create_button(text, text_color=ft.Colors.WHITE, bg_color=ft.Colors.GREY_900,):
         return ft.ElevatedButton(
             text=text,
             data=text,
@@ -61,7 +85,7 @@ def main(page: ft.Page):
             style=ft.ButtonStyle(shape=ft.CircleBorder()),
         )
 
-    def create_button2(text, text_color=ft.Colors.WHITE, bg_color=ft.Colors.GREY,):
+    def create_button2(text, text_color=ft.Colors.WHITE, bg_color=ft.Colors.GREY_900,):
         return ft.ElevatedButton(
             text=text,
             data=text,
@@ -87,7 +111,7 @@ def main(page: ft.Page):
                 controls=[
                     create_button("C", text_color=ft.Colors.RED),
                     create_button2("%",text_color=ft.Colors.BLUE),
-                    create_button("❌",text_color=ft.Colors.BLUE),
+                    create_button("DEL",text_color=ft.Colors.BLUE),
                     create_button("/",text_color=ft.Colors.BLUE),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_EVENLY
